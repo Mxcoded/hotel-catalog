@@ -1,67 +1,19 @@
-<!-- resources/views/rooms/create.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Room - Admin Panel</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+@extends('layouts.app')
+
+@section('title', 'Add Room - Admin Panel')
+
+@push('styles')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f7f7f7;
-        }
-        .container {
-            margin-top: 50px;
-            max-width: 700px;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .form-label {
-            font-weight: 500;
-        }
-        .btn-success {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-        .btn-success:hover {
-            background-color: #218838;
-        }
-     
+@endpush
 
-.tooltiptext {
-  visibility: hidden;
-  font-style: italic;
+@section('content')
+    <div class="container bg-white p-4 rounded shadow">
+        <h1 class="text-center"><i class="fa fa-plus-circle"></i> Add Room</h1>
+        <a href="{{ route('rooms.index') }}" class="btn btn-info mb-4">
+            <i class="fas fa-chevron-left"></i> Back to Rooms
+        </a>
 
-}
-
-.info:hover {
-  .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-    }
-}
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1><i class="fa fa-plus-circle"></i> Add Room</h1>
-        <a href="{{ route('rooms.index') }}" class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-chevron-left"></span> Back to Rooms
-          </a>
-        <!-- Form -->
-        <form action="{{ route('rooms.store') }}" method="POST" enctype="multipart/form-data" >
+        <form action="{{ route('rooms.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Room Name -->
@@ -83,7 +35,7 @@
             <div class="mb-3">
                 <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
                 <div class="input-group">
-                    <span class="input-group-text"><i class="fa fa-naira-sign"></i></span>
+                    <span class="input-group-text"><i class="fa fa-money-bill"></i></span>
                     <input type="number" class="form-control" name="price" id="price" step="0.01" placeholder="Enter room price" required>
                 </div>
             </div>
@@ -98,17 +50,18 @@
                 <small class="form-text text-muted">Please enter features in JSON format, e.g. <code>["WiFi", "Air Conditioning"]</code>.</small>
             </div>
 
-            <div class="form-group">
-                <label for="available">Available</label>
+            <!-- Availability -->
+            <div class="form-group mb-3">
+                <label for="available" class="form-label">Available</label>
                 <select class="form-control" name="available" id="availabilitySelect">
-                    <option value="1" >Yes</option>
+                    <option value="1">Yes</option>
                     <option value="0">Not Available Until...</option>
                 </select>
             </div>
 
             <!-- Date Picker for Availability Countdown -->
-            <div id="availabilityCountdown" class="form-group hidden">
-                <label for="available_from">Available From</label>
+            <div id="availabilityCountdown" class="form-group mb-3 d-none">
+                <label for="available_from" class="form-label">Available From</label>
                 <input type="text" class="form-control" name="available_from" id="availableFromDate" placeholder="Select date">
             </div>
 
@@ -116,54 +69,40 @@
             <div class="mb-3">
                 <label for="images" class="form-label">Room Images</label>
                 <input type="file" class="form-control" name="images[]" id="images" multiple>
-                <small class="form-text text-muted">You can upload multiple images. <span class="info"><span class="fa fa-info-circle"></span><span class="tooltiptext">Recommended 5 Photos per Room not more than 20MB in total.</span></div>
-                </span></small>
+                <small class="form-text text-muted">Recommended 5 photos per room, total size under 20MB. 
+                    <i class="fa fa-info-circle" data-bs-toggle="tooltip" title="Up to 20MB."></i>
+                </small>
+            </div>
 
             <!-- Submit Button -->
             <div class="d-grid">
-                <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i> Save Room</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save Room</button>
             </div>
 
+            <!-- Validation Errors -->
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </form>
-
-        <!-- Validation Errors -->
-        @if ($errors->any())
-            <div class="alert alert-danger mt-3">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
     </div>
+@endsection
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-     <!-- jQuery UI DatePicker and custom JS to handle the countdown logic -->
-     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-     <script>
-         $(document).ready(function() {
-             // Datepicker for selecting the availability date
-             $("#availableFromDate").datepicker({
-                 dateFormat: "yy-mm-dd"
-             });
- 
-             // Toggle the availability countdown field based on the selection
-             $("#availabilitySelect").change(function() {
-                 if ($(this).val() == '0') {
-                     $("#availabilityCountdown").removeClass('hidden');
-                 } else {
-                     $("#availabilityCountdown").addClass('hidden');
-                 }
-             });
-         });
-     </script>
-</body>
-</html>
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $("#availableFromDate").datepicker({ dateFormat: "yy-mm-dd" });
+
+            $("#availabilitySelect").change(function() {
+                $("#availabilityCountdown").toggleClass('d-none', $(this).val() == '1');
+            });
+
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush

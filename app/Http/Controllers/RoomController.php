@@ -8,15 +8,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+
 class RoomController extends Controller
 {
+    // public function __construct()
+    // {
+    //     // Apply 'auth' middleware to all methods except 'index' and 'show'
+    //     $this->middleware('auth')->except(['index', 'show']);
+    // }
     // Display a listing of the rooms
     public function index()
-    {
-        $rooms = Room::with('images')->get(); // Get all rooms with images
-        return view('rooms.index', compact('rooms')); // Pass data to the view
-
-    }
+{
+    $rooms = Room::with('images')->paginate(5); // Paginate rooms, 5 per page
+    return view('rooms.index', compact('rooms')); // Pass data to the view
+}
    
     // Show the form for creating a new room
     public function create()
