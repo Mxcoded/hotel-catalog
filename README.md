@@ -19,7 +19,7 @@ A web-based catalog application designed for Brickspoint's luxury hotels and apa
 - **Frontend**: Blade, JavaScript, HTML5, CSS3
 - **Database**: MySQL
 - **Image Handling**: Intervention Image for resizing and optimizing images
-- **Authentication**: Laravel Sanctum
+- **Authentication**: Laravel Breeze
 - **Deployment**: Docker (for local development), GitHub Actions for CI/CD (optional)
 
 ## Installation
