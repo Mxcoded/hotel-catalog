@@ -19,7 +19,7 @@ class RoomController extends Controller
     // Display a listing of the rooms
     public function index()
 {
-    $rooms = Room::with('images')->paginate(5); // Paginate rooms, 5 per page
+    $rooms = Room::with('images')->paginate(6); // Paginate rooms, 5 per page
     return view('rooms.index', compact('rooms')); // Pass data to the view
 }
    
@@ -32,35 +32,47 @@ class RoomController extends Controller
     // Store method
     public function store(Request $request)
     {
-         // Log file upload information
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $key => $image) {
-            Log::info("Uploaded file $key: " . $image->getClientOriginalName());
-            Log::info("File type: " . $image->getMimeType());
-            Log::info("File extension: " . $image->getClientOriginalExtension());
+        // Log file upload information
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $key => $image) {
+                Log::info("Uploaded file $key: " . $image->getClientOriginalName());
+                Log::info("File type: " . $image->getMimeType());
+                Log::info("File extension: " . $image->getClientOriginalExtension());
+            }
         }
-    }
+    
+        // Validate request data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
             'features' => 'nullable|string',
             'available' => 'nullable|boolean',
-            'available_from'=>'date|nullable',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480', // Validation for multiple images 20M
+            'available_from' => 'date|nullable',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480', // 20MB max size for each image
         ]);
+    
+        // Check if features is provided; if not, set it to an empty JSON array
+        $features = $request->input('features') ? json_encode(array_filter(explode(',', $request->input('features')))) : '[]';
 
-        $room = Room::create($request->except('images'));
-
+        // Create the room instance
+        $room = Room::create(array_merge(
+            $request->except('images', 'features'),
+            ['features' => $features]
+        ));
+    
+        // Process each image and save the path to the database
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imagePath = $image->store('images', 'public'); // Store the image
-                $room->images()->create(['image_path' => $imagePath]); // Save the path in the database
+                $imagePath = $image->store('images', 'public'); // Store image in public disk
+                $room->images()->create(['image_path' => $imagePath]); // Save path in database
             }
         }
-
+    
+        // Redirect with success message
         return redirect()->route('rooms.index')->with('success', 'Room created successfully.');
     }
+    
     public function availableRooms()
     {
         // Fetch only rooms that are available
