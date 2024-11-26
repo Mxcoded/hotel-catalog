@@ -7,7 +7,7 @@
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">Rooms List</h1>
-                <p class="lead text-muted">Explore our range of beautifully designed rooms.</p>
+                <p class="lead text-muted">Discover elegance and comfort in our luxury rooms, where every detail is crafted for your ultimate relaxation. Indulge in first-class amenities and personalized service that ensure an unforgettable stay. Let us redefine your idea of luxury.</p>
                 @auth
                     <a href="{{ route('rooms.create') }}" class="btn btn-primary">Add Room</a>
                 @endauth
@@ -54,9 +54,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $room->name }}</h5>
                                     <p class="card-text">{{ $room->description }}</p>
-                                    <p class="card-text"><strong>Price:</strong>
-                                        &#8358;{{ number_format($room->price, 2, '.', ',') }} / Night</p>
-                                    <p class="card-text"><strong>Features:</strong>
+                                        <p class="card-text"><strong>Price:</strong>
+                                            &#8358;{{ number_format($room->price, 2, '.', ',') }} / Night</p>
+                                        <p class="card-text"><strong>Features:</strong>
                                     <ul class="list-group list-group-flush">
                                         @foreach (json_decode($room->features, true) ?? [] as $index => $feature)
                                             <li class="list-group-item feature-item{{ $index >= 2 ? ' d-none' : '' }}"

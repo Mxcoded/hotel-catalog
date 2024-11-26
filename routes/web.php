@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 // Home route or landing page
-Route::get('/', [RoomController::class, 'index']);
+Route::get('/', [RoomController::class, 'index'])->name('home');
 
 // Full resource route for rooms, relying on middleware defined in RoomController
 Route::resource('rooms', RoomController::class);
