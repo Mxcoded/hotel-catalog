@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title') - BricksPoint E-Catalog</title>
+    <link rel="icon" href="https://github.com/Mxcoded/mxcoded.github.io/blob/main/bpicon.jpg"/>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,6 +13,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
     
     <style>
+        .read-more-link{
+            text-decoration: none;
+             padding: 5px 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+        }
         .carousel-inner { height: 280px; }
         .carousel-inner img { height: 100%; width: auto; object-fit: cover; }
         

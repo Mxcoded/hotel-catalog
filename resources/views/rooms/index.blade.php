@@ -7,14 +7,14 @@
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">Rooms List</h1>
-                <p class="lead text-muted">Explore our range of beautifully designed rooms.</p>
+                <p class="lead text-muted">Discover elegance and comfort in our luxury rooms, where every detail is crafted for your ultimate relaxation. Indulge in first-class amenities and personalized service that ensure an unforgettable stay. Let us redefine your idea of luxury.</p>
                 @auth
                     <a href="{{ route('rooms.create') }}" class="btn btn-primary">Add Room</a>
                 @endauth
                 @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
-                <a href="#" class="btn btn-info my-2 feedback">Submit A Feedback</a>
+                <a href="{{ route('feedback.create') }}" class="btn btn-info my-2 feedback">Submit A Feedback</a>
             </div>
         </div>
     </section>
@@ -54,9 +54,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $room->name }}</h5>
                                     <p class="card-text">{{ $room->description }}</p>
-                                    <p class="card-text"><strong>Price:</strong>
-                                        &#8358;{{ number_format($room->price, 2, '.', ',') }} / Night</p>
-                                    <p class="card-text"><strong>Features:</strong>
+                                    {{-- uncomment to show price --}}
+                                        {{-- <p class="card-text"><strong>Price:</strong>
+                                            &#8358;{{ number_format($room->price, 2, '.', ',') }} / Night</p> --}}
+                                        <p class="card-text"><strong>Features:</strong>
                                     <ul class="list-group list-group-flush">
                                         @foreach (json_decode($room->features, true) ?? [] as $index => $feature)
                                             <li class="list-group-item feature-item{{ $index >= 2 ? ' d-none' : '' }}"
@@ -65,8 +66,8 @@
                                     </ul>
                                     </p>
                                     @if (count(json_decode($room->features, true) ?? []) > 2)
-                                        <a href="javascript:void(0);" class="read-more-link"
-                                            data-room-id="{{ $room->id }}">Show All</a>
+                                        <a href="javascript:void(0);" class="read-more-link btn-sm btn-info"
+                                            data-room-id="{{ $room->id }}">Show All Features</a>
                                     @endif
 
 
@@ -89,7 +90,14 @@
                                             </span>
                                         @else
                                             <span class="status-available">
-                                                Available now
+                                               <!-- WhatsApp button -->
+<a 
+    href="https://wa.me/+2348160419132?text=Hi,%20I%20am%20interested%20in%20the%20room%20{{ $room->name }}" 
+    class="btn btn-success" 
+    target="_blank"
+>
+    Enquire on WhatsApp
+</a>
                                             </span>
                                         @endif
                                     </small>
